@@ -34,11 +34,28 @@ HOVER = '#92140C'
 GAME_PHASE = 'opening'
 GAME_STATE = 'home'
 CURRENT_PLAYER = 'player1'
-PLAYER_PIECE = ''
+PLAYER_PIECE = 'white'
+PLAYER_DICT = {
+    'player1': {
+        'num_pieces': 6,
+        'placed': 0,
+        'positions': set(),
+        'mill_formed': set(),
+        'previous_mill': set()
+    },
+    'ai': {
+        'num_pieces': 6,
+        'placed': 0,
+        'positions': set(),
+        'mill_formed': set(),
+        'previous_mill': set()
+    }
+}
 
 # Load images
 ICON = pygame.image.load(ICON_PATH)
 
+# Board settings
 board_piece_positions = [
     (197, 97), (398, 97), (600, 97), 
     (297, 196), (398, 196), (499, 196), 
@@ -46,3 +63,17 @@ board_piece_positions = [
     (297, 400), (398, 400), (499, 400), 
     (197, 501), (398, 501), (600, 501)
 ]
+
+POSSIBLE_MILLS = {
+    # Horizontal
+    ((197, 97), (398, 97), (600, 97)): None,
+    ((297, 196), (398, 196), (499, 196)): None,
+    ((297, 400), (398, 400), (499, 400)): None,
+    ((197, 501), (398, 501), (600, 501)): None,
+    
+    # Vertical
+    ((197, 97), (197, 298), (197, 501)): None,
+    ((297, 196), (297, 298), (297, 400)): None,
+    ((499, 196), (499, 298), (499, 400),): None,
+    ((600, 97), (600, 298), (600, 501)): None
+}

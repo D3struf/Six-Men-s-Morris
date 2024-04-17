@@ -106,6 +106,66 @@ def handle_select_piece(handle, mouse_pos=None):
         if black.clicked:
             black.selected = not black.selected
             white.selected = False
+        first_move()
+
+def first_move():
+    if VAR.PLAYER_PIECE == "white":
+        VAR.CURRENT_PLAYER = 'player1'
+    elif VAR.PLAYER_PIECE == "black":
+        VAR.CURRENT_PLAYER = 'ai'
+
+def switch_player():
+    VAR.CURRENT_PLAYER = 'ai' if VAR.CURRENT_PLAYER == 'player1' else 'player1'
+    
+def opening_game(player, board_pos):
+    placed = VAR.PLAYER_DICT[VAR.CURRENT_PLAYER]['placed']
+    # if all of the pieces has been placed
+    if placed >= len(white_pieces) or placed >= len(black_pieces):
+        return  
+    
+    if VAR.PLAYER_PIECE == "white":
+        if player == 'player1':
+            piece_to_move = white_pieces[placed]
+        elif player == 'ai':
+            piece_to_move = black_pieces[placed]
+    elif VAR.PLAYER_PIECE == "black":
+        if player == 'player1':
+            piece_to_move = black_pieces[placed]
+        elif player == 'ai':
+            piece_to_move = white_pieces[placed]
+            
+    piece_to_move.move(board_pos.position)  # Move the piece to the selected board position
+    VAR.PLAYER_DICT[VAR.CURRENT_PLAYER]['positions'].add(piece_to_move.current_position)  # Update piece position in the dictionary
+    VAR.PLAYER_DICT[VAR.CURRENT_PLAYER]['placed'] += 1  # Update the count of placed pieces
+    board_pos.occupied = True
+    
+
+def check_mill_formed(player):
+    mill = (VAR.PLAYER_DICT[player]['positions'])
+    for possible_mill in VAR.POSSIBLE_MILLS:
+        if len(mill) >= 3:
+            if all(piece_positions in possible_mill for piece_positions in mill):
+                print("MILL!!!!")
+                VAR.PLAYER_DICT[player]['previous_mill'] = VAR.PLAYER_DICT[player]['mill_formed']
+                VAR.PLAYER_DICT[player]['mill_formed'] = mill
+                print("PREVIOUS ", VAR.PLAYER_DICT[player]['previous_mill'])
+                print("FORMED ", VAR.PLAYER_DICT[player]['mill_formed'])
+                return True
+    return False
+
+def place_pieces(event):
+    for board_pos in board_positions:
+        if board_pos.is_clicked(event.pos):
+            if board_pos.occupied:
+                print("Position already occupied! 1")
+                return
+            
+            print(VAR.CURRENT_PLAYER)
+            opening_game(VAR.CURRENT_PLAYER, board_pos)
+            if check_mill_formed(VAR.CURRENT_PLAYER):
+                # remove other players piece from the baord
+                pass
+            switch_player()
 
 def handle_board_state(handle, event=None, mouse_pos=None):
     if handle:
@@ -130,6 +190,15 @@ def handle_board_state(handle, event=None, mouse_pos=None):
             VAR.GAME_STATE = 'pause'
         elif github_button.is_clicked(mouse_pos):
             webbrowser.open(VAR.GITHUB_URL)
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            total_placed = VAR.PLAYER_DICT['player1']['placed'] + VAR.PLAYER_DICT['ai']['placed']
+            if total_placed == 12:
+                VAR.GAME_PHASE ='middlegame'
+            if VAR.GAME_PHASE == 'opening':
+                place_pieces(event)
+            elif VAR.GAME_PHASE =='middlegame':
+                print("Middle Game!")
+                pass
 
 def handle_pause_state(handle, mouse_pos=None):
     if handle:
@@ -151,10 +220,20 @@ def handle_pause_state(handle, mouse_pos=None):
 def reset_board():
     VAR.CURRENT_PLAYER = "player1"
     VAR.GAME_PHASE = 'opening'
+    VAR.PLAYER_PIECE = 'white'
+    for players, data in VAR.PLAYER_DICT.items():
+        data['num_pieces'] = 6,
+        data['placed'] = 0
+        data['positions'] = set()
+        data['previous_mill'] = set()
+        data['mill_formed'] = set()
+
     for piece, pos in zip(white_pieces, [(708, y) for y in range(100, 494, 66)]):
         piece.rect.topleft = pos
     for piece, pos in zip(black_pieces, [(27, y) for y in range(100, 494, 66)]):
         piece.rect.topleft = pos
+    for board_pos in board_positions:
+        board_pos.occupied = False
 
 def main():
     loop = True
