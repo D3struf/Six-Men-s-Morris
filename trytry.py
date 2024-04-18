@@ -58,9 +58,9 @@ PLAYER_DICT = {
     'player1': {
         'num_pieces': 6,
         'placed': 0,
-        'positions': {(398, 501), (197, 501), (600, 501), (297, 298)},
+        'positions': {(297, 196), (499, 196), (398, 196)},
         'mill_formed': set(),
-        'previous_mill': set()
+        'previous_mill': set(),
     },
     'ai': {
         'num_pieces': 6,
@@ -78,11 +78,53 @@ PLAYER_DICT = {
 #                 print("MILL!!!!")
 
 # Reset the values
-for players, data in PLAYER_DICT.items():
-    data['num_pieces'] = 6
-    data['placed'] = 0
-    data['positions'] = set()
-    data['previous_mill'] = set()
-    data['mill_formed'] = set()
+# for players, data in PLAYER_DICT.items():
+#     data['num_pieces'] = 6
+#     data['placed'] = 0
+#     data['positions'] = set()
+#     data['previous_mill'] = set()
+#     data['mill_formed'] = set()
     
-print(PLAYER_DICT)
+# print(PLAYER_DICT)
+
+pieces1 = {(600, 97), (398, 501), (600, 298), (600, 501)}
+pieces2 = {(499, 196), (499, 298), (499, 400)}
+
+
+# mill = (PLAYER_DICT['player1']['positions'])
+# for possible_mill in POSSIBLE_MILLS:
+#     mills = set(possible_mill)
+#     if len(pieces1) >= 3 and mills.issubset(mill):
+#         print("first if")
+#         if not mills.issubset(PLAYER_DICT['player1']['previous_mill']):
+#             print("wala sa loob ng previous mill")
+#             PLAYER_DICT["player1"]['previous_mill'].update(mills)
+#             PLAYER_DICT["player1"]['mill_formed'] = mills
+#         else: print("nasa loob ng previous mill")
+        
+# print(PLAYER_DICT['player1']['mill_formed'])
+# print(PLAYER_DICT['player1']['previous_mill'])
+
+# if pieces2 == PLAYER_DICT['ai']['mill_formed']:
+#     print("MILL")
+# else:
+#     print("NAHHH")
+
+# player_positions = PLAYER_DICT['player1']['positions']
+# prev_mill = PLAYER_DICT['player1']['mill_formed']
+# mill = {(499, 196), (499, 298), (499, 400)}
+# mills = {(398, 501), (600, 298), (600, 501)}
+# possible_pieces_to_remove = player_positions - prev_mill  
+# # print(possible_pieces_to_remove)
+# print(PLAYER_DICT['player1']['mill_formed'])
+# PLAYER_DICT['player1']['mill_formed'].clear()
+# PLAYER_DICT['player1']['mill_formed'].update(mill)
+# # PLAYER_DICT['player1']['mill_formed']
+# print(PLAYER_DICT['player1'])
+
+l = ['1', '2', '3','4', '5','6']
+import random
+str = ''
+for i in range(7):
+    str += random.choice(l)
+print(str)

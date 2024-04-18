@@ -4,6 +4,7 @@ import pygame
 FPS = 60
 WIDTH, HEIGHT = 800, 600
 CENTER = (WIDTH*0.5, HEIGHT*0.5)
+PIECE_SIZE = 64
 
 # Paths
 ICON_PATH = './assets/icon.png'
@@ -35,8 +36,11 @@ GAME_PHASE = 'opening'
 GAME_STATE = 'home'
 CURRENT_PLAYER = 'player1'
 PLAYER_PIECE = 'white'
+IS_MILL = False
+CIRCLES_TO_DRAW = []
 PLAYER_DICT = {
     'player1': {
+        'in_board': 6,
         'num_pieces': 6,
         'placed': 0,
         'positions': set(),
@@ -44,6 +48,7 @@ PLAYER_DICT = {
         'previous_mill': set()
     },
     'ai': {
+        'in_board': 6,
         'num_pieces': 6,
         'placed': 0,
         'positions': set(),
