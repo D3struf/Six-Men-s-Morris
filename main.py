@@ -47,6 +47,7 @@ black = Button(VAR.BLACKPIECE_PATH, (500, 280))
 white_pieces = [Pieces(VAR.WHITEPIECE_PATH, pos) for pos in [(708, y) for y in range(100, 494, 66)]]
 black_pieces = [Pieces(VAR.BLACKPIECE_PATH, pos) for pos in [(27, y) for y in range(100, 494, 66)]]
 
+# Handle States
 def handle_home_state(handle, mouse_pos=None):
     if handle:
         screen.blit(surface, (0,0))
@@ -117,18 +118,31 @@ def first_move():
 def switch_player():
     VAR.CURRENT_PLAYER = 'ai' if VAR.CURRENT_PLAYER == 'player1' else 'player1'
 
-def player_piece(placed, player):
-    if VAR.PLAYER_PIECE == "white":
-        if player == 'player1':
-            piece = white_pieces[placed]
-        elif player == 'ai':
-            piece = black_pieces[placed]
-    elif VAR.PLAYER_PIECE == "black":
-        if player == 'player1':
-            piece = black_pieces[placed]
-        elif player == 'ai':
-            piece = white_pieces[placed]
-    return piece
+def player_piece(placed, player, game):
+    if game == 'opening':
+        if VAR.PLAYER_PIECE == "white":
+            if player == 'player1':
+                piece = white_pieces[placed]
+            elif player == 'ai':
+                piece = black_pieces[placed]
+        elif VAR.PLAYER_PIECE == "black":
+            if player == 'player1':
+                piece = black_pieces[placed]
+            elif player == 'ai':
+                piece = white_pieces[placed]
+        return piece
+    if game == 'middlegame':
+        if VAR.PLAYER_PIECE == "white":
+            if player == 'player1':
+                pieces = white_pieces
+            elif player == 'ai':
+                pieces = black_pieces
+        elif VAR.PLAYER_PIECE == "black":
+            if player == 'player1':
+                pieces = black_pieces
+            elif player == 'ai':
+                pieces = white_pieces
+        return pieces
 
 # Opening Game
 def opening_game(player, board_pos):
@@ -137,33 +151,30 @@ def opening_game(player, board_pos):
     if placed >= 6 or VAR.PLAYER_DICT[VAR.CURRENT_PLAYER]['in_board'] == 0:
         return
     
-    piece_to_move = player_piece(placed, player)
+    piece_to_move = player_piece(placed, player, 'opening')
             
     piece_to_move.move(board_pos.position)  # Move the piece to the selected board position
     VAR.PLAYER_DICT[VAR.CURRENT_PLAYER]['positions'].add(piece_to_move.current_position)  # Update piece position in the dictionary
     VAR.PLAYER_DICT[VAR.CURRENT_PLAYER]['placed'] += 1  # Update the count of placed pieces
     VAR.PLAYER_DICT[VAR.CURRENT_PLAYER]['in_board'] -= 1  # Update the count of placed pieces
     board_pos.occupied = True
-    
+
 def check_mill_formed(player):
-    if VAR.PLAYER_DICT[VAR.CURRENT_PLAYER]['placed'] == 6:
-        return
-    
-    mill = (VAR.PLAYER_DICT[player]['positions'])
+    if VAR.GAME_PHASE == 'opening':
+        if VAR.PLAYER_DICT[VAR.CURRENT_PLAYER]['placed'] == 6:
+            return
+    mill = VAR.PLAYER_DICT[player]['positions']
     for possible_mill in VAR.POSSIBLE_MILLS:
         mills = set(possible_mill)
         if len(mill) >= 3 and mills.issubset(mill):
-            print(VAR.PLAYER_DICT[player]['previous_mill'])
             if not mills.issubset(VAR.PLAYER_DICT[player]['previous_mill']):
                 print("MILL!!!!")
                 VAR.PLAYER_DICT[player]['previous_mill'].update(mills)
                 VAR.PLAYER_DICT[player]['mill_formed'] = mills
-                print(VAR.PLAYER_DICT)
                 VAR.IS_MILL = True
-        else: VAR.CIRCLES_TO_DRAW = []
+        else: VAR.CIRCLES_TO_DRAW = []  # Clear circles to draw if no mill is formed
 
-def remove_piece(player):
-    print('REMOVING FROM', player)
+def remove_piece(player, game):
     if player == 'player1':
         # pieces = white_pieces if VAR.PLAYER_PIECE == "white" else black_pieces
         opponent_pieces = black_pieces if VAR.PLAYER_PIECE == "white" else white_pieces
@@ -178,54 +189,109 @@ def remove_piece(player):
     
     VAR.CIRCLES_TO_DRAW = [position for position in possible_pieces_to_remove]
     
-    # if mouse clicked is near the position
-    mouse_pos = pygame.mouse.get_pos()
-    for board_pos in board_positions:
-        if board_pos.is_clicked(mouse_pos) and board_pos.occupied:
-            for opponent_piece in opponent_pieces:
-                if opponent_piece.is_clicked(mouse_pos):
-                    opponent_pieces.remove(opponent_piece)
-                    VAR.PLAYER_DICT[VAR.CURRENT_PLAYER]['positions'].remove(opponent_piece.current_position)
-                    board_pos.occupied = False
-                    VAR.PLAYER_DICT[VAR.CURRENT_PLAYER]['placed'] -= 1
-                    VAR.PLAYER_DICT[VAR.CURRENT_PLAYER]['num_pieces'] -= 1
-                    VAR.IS_MILL = False
-                    VAR.PLAYER_DICT[player]['mill_formed'] = set()
-                    print('REMOVED', VAR.PLAYER_DICT)
-                    break
-    
+    if game == 'opening':
+        # if mouse clicked is near the position
+        mouse_pos = pygame.mouse.get_pos()
+        for board_pos in board_positions:
+            if board_pos.is_clicked(mouse_pos) and board_pos.occupied:
+                for opponent_piece in opponent_pieces:
+                    if opponent_piece.is_clicked(mouse_pos):
+                        opponent_pieces.remove(opponent_piece)
+                        VAR.PLAYER_DICT[VAR.CURRENT_PLAYER]['positions'].remove(opponent_piece.current_position)
+                        board_pos.occupied = False
+                        VAR.PLAYER_DICT[VAR.CURRENT_PLAYER]['placed'] -= 1
+                        VAR.PLAYER_DICT[VAR.CURRENT_PLAYER]['num_pieces'] -= 1
+                        VAR.IS_MILL = False
+                        VAR.PLAYER_DICT[player]['mill_formed'] = set()
+                        print('REMOVED', VAR.PLAYER_DICT)
+                        break
+    elif game == 'middlegame':
+        print('REMOVING player')
+        mouse_pos = pygame.mouse.get_pos()
+        
+        for opponent_piece in opponent_pieces:
+            print('OPPONENT PIECES', opponent_piece.current_position)
+            if opponent_piece.is_clicked(mouse_pos):
+                opponent_pieces.remove(opponent_piece)
+                VAR.PLAYER_DICT[VAR.CURRENT_PLAYER]['positions'].remove(opponent_piece.current_position)
+                # board_pos.occupied = False
+                VAR.PLAYER_DICT[VAR.CURRENT_PLAYER]['placed'] -= 1
+                VAR.PLAYER_DICT[VAR.CURRENT_PLAYER]['num_pieces'] -= 1
+                VAR.IS_MILL = False
+                VAR.PLAYER_DICT[player]['mill_formed'] = set()
+                print('REMOVED', VAR.PLAYER_DICT)
+                break
+        
 def place_pieces(event):
     for board_pos in board_positions:
         if board_pos.is_clicked(event.pos):
             if board_pos.occupied:
-                print("Position already occupied! 1")
+                print("Position already occupied!")
                 break
             
             if VAR.GAME_PHASE == 'opening':
                 opening_game(VAR.CURRENT_PLAYER, board_pos)
                 check_mill_formed(VAR.CURRENT_PLAYER)
                 switch_player()
-            elif board_pos.occupied and VAR.GAME_PHASE == 'middlegame':
-                middle_game(VAR.CURRENT_PLAYER, board_pos)
-                check_mill_formed(VAR.CURRENT_PLAYER)
-                switch_player()
-            
+
 # Middle Game
-def middle_game(player, board_pos):
-    placed = VAR.PLAYER_DICT[VAR.CURRENT_PLAYER]['placed']
-    
-    piece_to_move = player_piece(placed, player)
-    
-    for piece in piece_to_move:
-        show_possible_moves(piece)
+def middle_game(player, mouse_pos):    
+    pieces = player_piece(0, player, 'middlegame') 
+    pieces_loc = [pos.current_position for pos in pieces]
+    for board_pos in board_positions:
+        if board_pos.is_clicked(mouse_pos):
+            if board_pos.position in pieces_loc:
+                VAR.SELECTED_PIECE = selected_piece(pieces, board_pos)
+                show_possible_moves(board_pos)
+                board_pos.occupied = False
+            elif board_pos.position in VAR.BOARD_TO_DRAW:
+                move_piece_to(board_pos)
+                break
+
+def check_mill_deformed(player):
+    mill = VAR.PLAYER_DICT[player]['positions']
+    for possible_mill in VAR.POSSIBLE_MILLS:
+        mills = set(possible_mill)
+        if not mills.issubset(mill) and not mills.issubset(VAR.PLAYER_DICT[player]['previous_mill']):
+            y = VAR.PLAYER_DICT[player]['previous_mill'].difference(mills) 
+            VAR.PLAYER_DICT[player]['previous_mill'].difference_update(y)
+
+def move_piece_to(board_pos):
+    """Move the selected piece to the clicked board position"""
+    selected_piece = VAR.SELECTED_PIECE
+    for position in VAR.PLAYER_DICT[VAR.CURRENT_PLAYER]['positions']:
+        if position == selected_piece.current_position:
+            # update the current players positions in the dictionary
+            VAR.PLAYER_DICT[VAR.CURRENT_PLAYER]['positions'].remove(position)
+            VAR.PLAYER_DICT[VAR.CURRENT_PLAYER]['positions'].add(board_pos.position)
+    selected_piece.move(board_pos.position)
+    board_pos.occupied = True
+    VAR.BOARD_TO_DRAW = []
+    check_mill_formed(VAR.CURRENT_PLAYER)
+    check_mill_deformed(VAR.CURRENT_PLAYER)
+    print('moved to', VAR.PLAYER_DICT[VAR.CURRENT_PLAYER])
+    switch_player()
+    # if VAR.IS_MILL:
+    #     other_player = 'player1' if VAR.CURRENT_PLAYER == 'ai' else 'ai'
+    #     remove_piece(other_player, 'middlegame')
+
+def selected_piece(pieces, board_pos):
+    """return the piece at the given board position"""
+    for piece in pieces:
+        if piece.current_position == board_pos.position:
+            return piece
 
 def show_possible_moves(selected_piece):
-    if selected_piece.current_position in VAR.POSSIBLE_MOVES:
-        moves = VAR.POSSIBLE_MOVES[selected_piece.current_position]
+    """set possible board positions of the piece to move"""
+    possible_moves = []
+    if selected_piece.position in VAR.POSSIBLE_MOVES:
+        moves = VAR.POSSIBLE_MOVES[selected_piece.position]
         for move in moves:
             for board_pos in board_positions:
-                if board_pos.position == move:
-                    board_pos.draw_circle(screen, 'green')
+                if board_pos.position == move and not board_pos.occupied:
+                    # board_pos.draw_circle(screen, 'green')
+                    possible_moves.append(move)
+    VAR.BOARD_TO_DRAW = possible_moves
 
 def handle_board_state(handle, event=None, mouse_pos=None):
     if handle:
@@ -239,11 +305,9 @@ def handle_board_state(handle, event=None, mouse_pos=None):
             for pieces in white_pieces + black_pieces:
                 pieces.draw(screen)
         if VAR.GAME_PHASE == 'middlegame':
-            # for boards_pos in board_positions:
-            #     boards_pos.draw_circle(screen, None)
+            for position in VAR.BOARD_TO_DRAW:
+                pygame.draw.circle(screen, "RED", position, 14, width=4)
             for piece in white_pieces + black_pieces:
-                if piece.clicked:
-                    show_possible_moves(piece)
                 piece.draw(screen)
         if VAR.IS_MILL:
             for position in VAR.CIRCLES_TO_DRAW:
@@ -261,13 +325,16 @@ def handle_board_state(handle, event=None, mouse_pos=None):
                 place_pieces(event)
                 if VAR.IS_MILL:
                     other_player = 'player1' if VAR.CURRENT_PLAYER == 'ai' else 'ai'
-                    remove_piece(other_player)
+                    remove_piece(other_player, 'opening')
             elif VAR.GAME_PHASE =='middlegame':
-                print("Middle Game!")
-                place_pieces(event)
+                print('player: ', VAR.CURRENT_PLAYER)
+                print('circles to draw: ', VAR.CIRCLES_TO_DRAW)
+                middle_game(VAR.CURRENT_PLAYER, mouse_pos)
+                if VAR.IS_MILL:
+                    other_player = 'player1' if VAR.CURRENT_PLAYER == 'ai' else 'ai'
+                    remove_piece(VAR.CURRENT_PLAYER, 'middlegame')
             elif VAR.GAME_PHASE == 'lategame':
                 print("Late Game!")
-                pass
 
 def handle_pause_state(handle, mouse_pos=None):
     if handle:

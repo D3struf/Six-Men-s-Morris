@@ -54,22 +54,22 @@ POSSIBLE_MILLS = {
     ((499, 196), (499, 298), (499, 400),): None,
     ((600, 97), (600, 298), (600, 501)): None
 }
-PLAYER_DICT = {
-    'player1': {
-        'num_pieces': 6,
-        'placed': 0,
-        'positions': {(297, 196), (499, 196), (398, 196)},
-        'mill_formed': set(),
-        'previous_mill': set(),
-    },
-    'ai': {
-        'num_pieces': 6,
-        'placed': 0,
-        'positions': set(),
-        'mill_formed': set(),
-        'previous_mill': set()
-    }
-}
+# PLAYER_DICT = {
+#     'player1': {
+#         'num_pieces': 6,
+#         'placed': 0,
+#         'positions': {(297, 196), (499, 196), (398, 196)},
+#         'mill_formed': set(),
+#         'previous_mill': set(),
+#     },
+#     'ai': {
+#         'num_pieces': 6,
+#         'placed': 0,
+#         'positions': set(),
+#         'mill_formed': set(),
+#         'previous_mill': set()
+#     }
+# }
 
 # mill = (PLAYER_DICT['player1']['positions'])
 # for possible_mill in POSSIBLE_MILLS:
@@ -114,17 +114,68 @@ pieces2 = {(499, 196), (499, 298), (499, 400)}
 # prev_mill = PLAYER_DICT['player1']['mill_formed']
 # mill = {(499, 196), (499, 298), (499, 400)}
 # mills = {(398, 501), (600, 298), (600, 501)}
+# y = {(297, 400), (398, 400), (499, 400)}
 # possible_pieces_to_remove = player_positions - prev_mill  
 # # print(possible_pieces_to_remove)
 # print(PLAYER_DICT['player1']['mill_formed'])
 # PLAYER_DICT['player1']['mill_formed'].clear()
 # PLAYER_DICT['player1']['mill_formed'].update(mill)
-# # PLAYER_DICT['player1']['mill_formed']
+# PLAYER_DICT['player1']['previous_mill'].update(y)
+# # print(PLAYER_DICT['player1'])
+# x = mill.symmetric_difference_update(y)
+# print(x)
+# PLAYER_DICT['player1']['previous_mill'].update(x)
+# PLAYER_DICT['player1']['mill_formed']
 # print(PLAYER_DICT['player1'])
 
-l = ['1', '2', '3','4', '5','6']
-import random
-str = ''
-for i in range(7):
-    str += random.choice(l)
-print(str)
+# l = ['1', '2', '3','4', '5','6']
+# import random
+# str = ''
+# for i in range(7):
+#     str += random.choice(l)
+# print(str)
+
+# f = lambda x, y: x * y
+# print(f(3,3))
+
+
+# # function doc
+# def add(x, y):
+#     """return the sum of x and y
+
+#     Args:
+#         x (int): any integer
+#         y (int): any integer
+#     """
+#     return x + y
+
+# print(add.__doc__)
+
+PLAYER_DICT = {
+    'player1': {
+        'num_pieces': 6,
+        'placed': 0,
+        'positions': {(297, 196), (499, 196), (398, 196)},
+        'mill_formed': set(),
+        'previous_mill': {(499, 196), (499, 298), (499, 400), (297, 400), (398, 400)},
+    },
+}
+
+# mills = {(297, 400), (398, 400), (499, 400)}
+# y = PLAYER_DICT['player1']['previous_mill'].difference(mills) 
+# PLAYER_DICT['player1']['previous_mill'].difference_update(y)
+# print(PLAYER_DICT['player1']['previous_mill'])
+
+SELECTED_PIECE = (297, 196)
+selected_piece = SELECTED_PIECE
+new_pos = (499, 298)
+for position in PLAYER_DICT['player1']['positions']:
+    selected_piece = SELECTED_PIECE
+    if position == selected_piece:
+        # update the current players positions in the dictionary
+        PLAYER_DICT['player1']['positions'].remove(position)
+        print(PLAYER_DICT['player1']['positions'])
+        PLAYER_DICT['player1']['positions'].add(new_pos)
+        print(PLAYER_DICT['player1']['positions'])
+        
+print(PLAYER_DICT['player1']['positions'])
