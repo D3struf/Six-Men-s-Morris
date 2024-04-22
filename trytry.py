@@ -155,27 +155,40 @@ PLAYER_DICT = {
     'player1': {
         'num_pieces': 6,
         'placed': 0,
-        'positions': {(297, 196), (499, 196), (398, 196)},
+        'positions': {(297, 196), (499, 196), (398, 196), (499, 298), (398, 400)},
         'mill_formed': set(),
-        'previous_mill': {(499, 196), (499, 298), (499, 400), (297, 400), (398, 400)},
+        'previous_mill': {(398, 196), (499, 298), (297, 196), (499, 196), (499, 400)},
     },
 }
 
-# mills = {(297, 400), (398, 400), (499, 400)}
+# mills = PLAYER_DICT['player1']['positions']
 # y = PLAYER_DICT['player1']['previous_mill'].difference(mills) 
 # PLAYER_DICT['player1']['previous_mill'].difference_update(y)
 # print(PLAYER_DICT['player1']['previous_mill'])
 
-SELECTED_PIECE = (297, 196)
-selected_piece = SELECTED_PIECE
-new_pos = (499, 298)
-for position in PLAYER_DICT['player1']['positions']:
-    selected_piece = SELECTED_PIECE
-    if position == selected_piece:
-        # update the current players positions in the dictionary
-        PLAYER_DICT['player1']['positions'].remove(position)
-        print(PLAYER_DICT['player1']['positions'])
-        PLAYER_DICT['player1']['positions'].add(new_pos)
-        print(PLAYER_DICT['player1']['positions'])
+mill = PLAYER_DICT['player1']['positions']
+for possible_mill in POSSIBLE_MILLS:
+    mills = set(possible_mill)
+    if mills.issubset(mill) and mills.issubset(PLAYER_DICT['player1']['previous_mill']):
+        print("mills: ", mills)
+        y = PLAYER_DICT['player1']['previous_mill'].difference(mills) 
+        print(y)
+        PLAYER_DICT['player1']['previous_mill'].intersection_update(y)
+print("CHECK MILL DEFORMED: ", PLAYER_DICT['player1']['previous_mill'])
+
+# SELECTED_PIECE = (297, 196)
+# selected_piece = SELECTED_PIECE
+# new_pos = (499, 298)
+# for position in PLAYER_DICT['player1']['positions']:
+#     selected_piece = SELECTED_PIECE
+#     if position == selected_piece:
+#         # update the current players positions in the dictionary
+#         PLAYER_DICT['player1']['positions'].remove(position)
+#         print(PLAYER_DICT['player1']['positions'])
+#         PLAYER_DICT['player1']['positions'].add(new_pos)
+#         print(PLAYER_DICT['player1']['positions'])
         
-print(PLAYER_DICT['player1']['positions'])
+# print(PLAYER_DICT['player1']['positions'])
+
+# import pygame
+# print(pygame.font.get_fonts())

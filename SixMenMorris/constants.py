@@ -34,14 +34,14 @@ HOVER = '#92140C'
 # Game States
 GAME_PHASE = 'opening'
 GAME_STATE = 'home'
-CURRENT_PLAYER = 'player1'
+CURRENT_PLAYER = 'Player'
 PLAYER_PIECE = 'white'
 IS_MILL = False
 CIRCLES_TO_DRAW = []
 BOARD_TO_DRAW = []
 SELECTED_PIECE = []
 PLAYER_DICT = {
-    'player1': {
+    'Player': {
         'in_board': 6,
         'num_pieces': 6,
         'placed': 0,
@@ -49,7 +49,7 @@ PLAYER_DICT = {
         'mill_formed': set(),
         'previous_mill': set()
     },
-    'ai': {
+    'AI': {
         'in_board': 6,
         'num_pieces': 6,
         'placed': 0,
