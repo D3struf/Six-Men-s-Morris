@@ -54,6 +54,7 @@ POSSIBLE_MILLS = {
     ((499, 196), (499, 298), (499, 400),): None,
     ((600, 97), (600, 298), (600, 501)): None
 }
+
 # PLAYER_DICT = {
 #     'player1': {
 #         'num_pieces': 6,
@@ -86,13 +87,20 @@ POSSIBLE_MILLS = {
 #     data['mill_formed'] = set()
     
 # print(PLAYER_DICT)
-
+board_piece_positions = [
+    (197, 97), (398, 97), (600, 97), 
+    (297, 196), (398, 196), (499, 196), 
+    (197, 298), (297, 298),(499, 298), (600, 298), 
+    (297, 400), (398, 400), (499, 400), 
+    (197, 501), (398, 501), (600, 501)
+]
 pieces1 = {(600, 97), (398, 501), (600, 298), (600, 501)}
 pieces2 = {(499, 196), (499, 298), (499, 400)}
 
-
+# occupied = set(pieces1 | pieces2)
+# print(set(board_piece_positions) - occupied)
 # mill = (PLAYER_DICT['player1']['positions'])
-# for possible_mill in POSSIBLE_MILLS:
+# for possible_mill in`` POSSIBLE_MILLS:
 #     mills = set(possible_mill)
 #     if len(pieces1) >= 3 and mills.issubset(mill):
 #         print("first if")
@@ -166,15 +174,15 @@ PLAYER_DICT = {
 # PLAYER_DICT['player1']['previous_mill'].difference_update(y)
 # print(PLAYER_DICT['player1']['previous_mill'])
 
-mill = PLAYER_DICT['player1']['positions']
-for possible_mill in POSSIBLE_MILLS:
-    mills = set(possible_mill)
-    if mills.issubset(mill) and mills.issubset(PLAYER_DICT['player1']['previous_mill']):
-        print("mills: ", mills)
-        y = PLAYER_DICT['player1']['previous_mill'].difference(mills) 
-        print(y)
-        PLAYER_DICT['player1']['previous_mill'].intersection_update(y)
-print("CHECK MILL DEFORMED: ", PLAYER_DICT['player1']['previous_mill'])
+# mill = PLAYER_DICT['player1']['positions']
+# for possible_mill in POSSIBLE_MILLS:
+#     mills = set(possible_mill)
+#     if mills.issubset(mill) and mills.issubset(PLAYER_DICT['player1']['previous_mill']):
+#         print("mills: ", mills)
+#         y = PLAYER_DICT['player1']['previous_mill'].difference(mills) 
+#         print(y)
+#         PLAYER_DICT['player1']['previous_mill'].intersection_update(y)
+# print("CHECK MILL DEFORMED: ", PLAYER_DICT['player1']['previous_mill'])
 
 # SELECTED_PIECE = (297, 196)
 # selected_piece = SELECTED_PIECE

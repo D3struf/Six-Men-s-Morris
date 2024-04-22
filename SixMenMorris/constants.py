@@ -8,6 +8,7 @@ PIECE_SIZE = 64
 
 # Paths
 ICON_PATH = './assets/icon.png'
+CONFETTI = './assets/confetti.gif'
 BACKGROUNDGIF_PATH = "./assets/background.gif"
 BACKGROUND_PATH = "./assets/background.png"
 INSTRUCTION1_PATH = "./assets/instruction1.png"
@@ -33,10 +34,11 @@ HOVER = '#92140C'
 
 # Game States
 GAME_PHASE = 'opening'
-GAME_STATE = 'home'
+GAME_STATE = 'board'
 CURRENT_PLAYER = 'Player'
 PLAYER_PIECE = 'white'
 IS_MILL = False
+PLAYER_REMOVED_PIECE = False
 CIRCLES_TO_DRAW = []
 BOARD_TO_DRAW = []
 SELECTED_PIECE = []
