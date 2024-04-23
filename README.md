@@ -72,8 +72,21 @@ For more detailed rules, refer to [Six Men's Morris Rules](https://en.wikipedia.
 ## Screenshots
 
 - Home Page
+  ![image](https://github.com/D3struf/Six-Men-s-Morris/assets/93712294/6efd5ae9-fa7b-4cb2-a370-e74d579135ea)
+
 - Instruction Pages
+  ![image](https://github.com/D3struf/Six-Men-s-Morris/assets/93712294/c14c2aa6-9eb5-4b17-8ae4-c2961cbe1368)
+  ![image](https://github.com/D3struf/Six-Men-s-Morris/assets/93712294/d6438bb8-6b77-41ad-8cb4-54dfe956f914)
+
 - Piece Selection
+  ![image](https://github.com/D3struf/Six-Men-s-Morris/assets/93712294/3966569e-d5ba-4263-8dc4-8a50d3d5e07b)
+
 - Main Game
+  ![image](https://github.com/D3struf/Six-Men-s-Morris/assets/93712294/1afcff45-5aa0-4994-b1fe-9ed147819105)
+
 - Pause Page
+  ![image](https://github.com/D3struf/Six-Men-s-Morris/assets/93712294/d8eb2152-ae52-49e5-84d6-9b4da072be2b)
+
 - Winner Page
+  ![image](https://github.com/D3struf/Six-Men-s-Morris/assets/93712294/11e40e94-731f-4245-affb-4a63e4b755a0)
+
