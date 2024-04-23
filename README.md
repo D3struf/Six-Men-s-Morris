@@ -72,7 +72,7 @@ For more detailed rules, refer to [Six Men's Morris Rules](https://en.wikipedia.
 ## Screenshots
 
 - Home Page
-  ![image](https://github.com/D3struf/Six-Men-s-Morris/assets/93712294/6efd5ae9-fa7b-4cb2-a370-e74d579135ea)
+  ![image](https://github.com/D3struf/Six-Men-s-Morris/assets/93712294/430fa28d-599d-427e-b76d-22af1d338eca)
 
 - Instruction Pages
   ![image](https://github.com/D3struf/Six-Men-s-Morris/assets/93712294/c14c2aa6-9eb5-4b17-8ae4-c2961cbe1368)
