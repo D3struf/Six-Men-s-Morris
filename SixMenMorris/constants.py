@@ -34,7 +34,7 @@ HOVER = '#92140C'
 
 # Game States
 GAME_PHASE = 'opening'
-GAME_STATE = 'board'
+GAME_STATE = 'home'
 CURRENT_PLAYER = 'Player'
 PLAYER_PIECE = 'white'
 IS_MILL = False
